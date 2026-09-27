@@ -9,6 +9,7 @@ import { ProposeScreen } from "./Propose";
 import { QuestScreen, VoteScreen } from "./VoteQuest";
 import { AssassinScreen } from "./Assassin";
 import { Plate } from "@/components/Plate";
+import { MAX_PLAYERS } from "@/lib/rules";
 
 /** Hold the header chip to privately recall your role mid-game; release to hide. */
 function RolePeek({ v }: { v: PlayerView }) {
@@ -190,7 +191,7 @@ export function Controller({
             <div className="serif" style={{ font: "700 30px var(--font-serif)" }}>{v.me.name}</div>
             <div style={{ color: "var(--parchment-55)", font: "400 14px var(--font-body)" }}>
               You are seated. The court gathers on the TV —<br />
-              {v.playerCount} of 10 seats filled.
+              {v.playerCount} of {MAX_PLAYERS} seats filled.
             </div>
             <button
               onClick={() => setShowLeave(true)}

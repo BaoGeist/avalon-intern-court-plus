@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import QRCode from "qrcode";
 import type { TvView } from "@/lib/views";
 import { Crest } from "@/components/Crest";
-import { MIN_PLAYERS } from "@/lib/rules";
+import { MAX_PLAYERS, MIN_PLAYERS } from "@/lib/rules";
 
 export function TvLobby({
   v,
@@ -27,7 +27,11 @@ export function TvLobby({
   }, [v.code]);
 
   const seats = [...v.players].sort((a, b) => a.seat - b.seat);
-  const ghosts = Math.max(0, Math.max(MIN_PLAYERS, seats.length + 1) - seats.length);
+  const shown = Math.min(MAX_PLAYERS, Math.max(MIN_PLAYERS, seats.length + 1));
+  const ghosts = Math.max(0, shown - seats.length);
+  const crowded = seats.length + ghosts > 10;
+  const crestSize = crowded ? 60 : 80;
+  const nameFont = `500 ${crowded ? 20 : 26}px var(--font-body)`;
 
   return (
     <div style={{ position: "absolute", inset: 0 }}>
@@ -72,15 +76,15 @@ export function TvLobby({
           right: 0,
           display: "flex",
           justifyContent: "center",
-          gap: 52,
+          ...(crowded ? { flexWrap: "wrap", gap: "20px 36px", padding: "0 120px" } : { gap: 52 }),
         }}
       >
         {seats.map((p) => (
           <div key={p.id} style={{ textAlign: "center" }} className="rise-in">
             <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
-              <Crest name={p.name} size={80} />
+              <Crest name={p.name} size={crestSize} />
             </div>
-            <div style={{ font: "500 26px var(--font-body)" }}>{p.name}</div>
+            <div style={{ font: nameFont }}>{p.name}</div>
             <button
               onClick={() => act("kick", { playerId: p.id })}
               style={{
@@ -97,9 +101,9 @@ export function TvLobby({
         {Array.from({ length: ghosts }).map((_, i) => (
           <div key={`g${i}`} style={{ textAlign: "center", opacity: 0.3 }}>
             <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
-              <Crest name="" size={80} empty />
+              <Crest name="" size={crestSize} empty />
             </div>
-            <div style={{ font: "500 26px var(--font-body)" }}>—</div>
+            <div style={{ font: nameFont }}>—</div>
           </div>
         ))}
       </div>

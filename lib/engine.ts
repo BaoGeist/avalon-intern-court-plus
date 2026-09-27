@@ -67,7 +67,7 @@ export function addPlayer(s: GameState, p: { id: string; token: string; name: st
   assert(s.phase === "lobby" || s.phase === "setup", "The court has already convened");
   const name = p.name.trim().slice(0, 14);
   assert(name.length >= 1, "A name is required");
-  assert(s.players.length < MAX_PLAYERS, "The court is full (10 seats)");
+  assert(s.players.length < MAX_PLAYERS, `The court is full (${MAX_PLAYERS} seats)`);
   assert(
     !s.players.some((q) => q.name.toLowerCase() === name.toLowerCase()),
     "That name is already seated"

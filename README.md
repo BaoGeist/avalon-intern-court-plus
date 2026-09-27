@@ -11,7 +11,7 @@ private controller. Built from the design handoff in
 
 1. Open the site on the TV / biggest browser in the room → **Create a Court**.
 2. Players scan the QR (or go to `/join`) and enter the 4-letter code.
-3. 5–10 players. The Game Master configures roles on the TV and begins the court.
+3. 5–16 players (11–16 use house-extended mission sizes). The Game Master configures roles on the TV and begins the court.
 
 ## Architecture
 

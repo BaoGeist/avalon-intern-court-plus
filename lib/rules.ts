@@ -1,7 +1,7 @@
 import type { RoleKey } from "./types";
 
 export const MIN_PLAYERS = 5;
-export const MAX_PLAYERS = 10;
+export const MAX_PLAYERS = 16;
 
 /** Mission team sizes per player count (index = mission 0..4) */
 export const MISSION_SIZES: Record<number, number[]> = {
@@ -11,6 +11,13 @@ export const MISSION_SIZES: Record<number, number[]> = {
   8: [3, 4, 4, 5, 5],
   9: [3, 4, 4, 5, 5],
   10: [3, 4, 4, 5, 5],
+  // House extension beyond the official 10-player rules
+  11: [4, 5, 5, 6, 6],
+  12: [4, 5, 5, 6, 6],
+  13: [4, 5, 6, 6, 7],
+  14: [4, 5, 6, 6, 7],
+  15: [5, 6, 6, 7, 7],
+  16: [5, 6, 6, 7, 7],
 };
 
 /** mission index that needs two Fail cards (7+ players only), else -1 */
@@ -25,7 +32,9 @@ export function failsRequired(playerCount: number, mission: number): number {
 export function evilCount(playerCount: number): number {
   if (playerCount <= 6) return 2;
   if (playerCount <= 9) return 3;
-  return 4;
+  if (playerCount <= 11) return 4;
+  if (playerCount <= 14) return 5;
+  return 6;
 }
 
 /** Default special roles by player count. Servants/Minions fill the remainder. */

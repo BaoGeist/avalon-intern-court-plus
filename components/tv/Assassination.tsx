@@ -53,7 +53,7 @@ export function AssassinationQuiet({ v }: { v: TvView }) {
           right: 0,
           display: "flex",
           justifyContent: "center",
-          gap: 44,
+          gap: v.players.length > 10 ? 24 : 44,
           opacity: 0.5,
         }}
       >

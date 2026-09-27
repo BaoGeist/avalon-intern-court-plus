@@ -144,8 +144,9 @@ export function RoundTable({ v }: { v: TvView }) {
   const n = players.length;
   const cx = 960;
   const cy = 590;
-  const rx = 430;
-  const ry = 300;
+  const crowded = n > 10;
+  const rx = crowded ? 560 : 430;
+  const ry = crowded ? 310 : 300;
 
   const banner = () => {
     if (v.phase === "proposal") {
@@ -215,12 +216,12 @@ export function RoundTable({ v }: { v: TvView }) {
             }}
           >
             {isLeader && (
-              <div className="flame" style={{ fontSize: 34, color: "var(--gold)", lineHeight: 1.1 }}>
+              <div className="flame" style={{ fontSize: crowded ? 28 : 34, color: "var(--gold)", lineHeight: 1.1 }}>
                 ♛
               </div>
             )}
             <div style={{ display: "flex", justifyContent: "center", marginBottom: 8, position: "relative" }}>
-              <Crest name={p.name} size={72} lifted={chosen} />
+              <Crest name={p.name} size={crowded ? 56 : 72} lifted={chosen} />
               {voted && (
                 <div
                   className="rise-in"
@@ -244,7 +245,7 @@ export function RoundTable({ v }: { v: TvView }) {
             </div>
             <div
               style={{
-                font: "600 26px var(--font-body)",
+                font: `600 ${crowded ? 20 : 26}px var(--font-body)`,
                 color: chosen || isLeader ? "var(--gold)" : "var(--parchment)",
               }}
             >
