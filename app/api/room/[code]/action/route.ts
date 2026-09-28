@@ -50,6 +50,7 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ code: stri
             if (s.phase === "assassinationReveal") return ackAssassinationReveal(s);
             return s; // stale ack after an auto-advance — harmless
           case "playAgain":
+          case "restart":
             return playAgain(s);
           default:
             throw new GameError("Unknown host action");

@@ -56,6 +56,43 @@ function Stage({ children }: { children: React.ReactNode }) {
   );
 }
 
+/** Host escape hatch: back to Court Setup with the same seats. Two taps so it can't be hit by accident. */
+function RestartButton({ act }: { act: (a: string) => Promise<boolean> }) {
+  const [armed, setArmed] = useState(false);
+  useEffect(() => {
+    if (!armed) return;
+    const t = setTimeout(() => setArmed(false), 4000);
+    return () => clearTimeout(t);
+  }, [armed]);
+  return (
+    <button
+      onClick={() => {
+        if (!armed) return setArmed(true);
+        setArmed(false);
+        act("restart");
+      }}
+      style={{
+        position: "fixed",
+        top: 12,
+        right: 12,
+        zIndex: 80,
+        font: "600 12px var(--font-body)",
+        letterSpacing: "0.1em",
+        textTransform: "uppercase",
+        padding: "8px 12px",
+        borderRadius: 2,
+        cursor: "pointer",
+        background: armed ? "var(--gold)" : "transparent",
+        color: armed ? "var(--ground)" : "var(--parchment-55)",
+        border: `1px solid ${armed ? "var(--gold)" : "rgba(237,230,214,0.25)"}`,
+        opacity: armed ? 1 : 0.6,
+      }}
+    >
+      {armed ? "Tap again — restart, same players" : "↺ Return to setup"}
+    </button>
+  );
+}
+
 export function TvApp({
   code,
   hostToken,
@@ -151,6 +188,7 @@ export function TvApp({
   return (
     <>
       <Stage>{screen()}</Stage>
+      {!["lobby", "setup", "gameover"].includes(v.phase) && <RestartButton act={act} />}
       {narrow && (
         <div
           style={{

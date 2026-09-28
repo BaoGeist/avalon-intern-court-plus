@@ -165,6 +165,14 @@ await act(hostToken, "updateConfig", { config: { assassination: false } });
 tv = await readView(code, hostToken);
 assert(tv.config.assassination === false, "assassination toggled off");
 
+/* host restart mid-game -> back to setup, same seats, config kept */
+roleOf = await dealAndSwearIn();
+await act(hostToken, "restart");
+tv = await readView(code, hostToken);
+assert(tv.phase === "setup" && tv.playerCount === 5, "restart mid-game -> setup, players kept");
+assert(tv.config.assassination === false, "restart keeps config");
+assert(tv.players.every((p) => !p.ready), "restart clears sworn-in state");
+
 roleOf = await dealAndSwearIn();
 await runMission(roleOf, []);
 await runMission(roleOf, []);

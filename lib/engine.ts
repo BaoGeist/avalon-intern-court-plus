@@ -366,8 +366,9 @@ export function ackAssassinationReveal(s: GameState, now = Date.now(), force = f
   return { ...s, phase: "gameover" };
 }
 
+/** Back to Court Setup with the same seats. Allowed from gameover or mid-game (host restart). */
 export function playAgain(s: GameState): GameState {
-  assert(s.phase === "gameover", "The game is not over");
+  assert(s.phase !== "lobby" && s.phase !== "setup", "The court has not convened yet");
   return {
     ...createRoom(s.code, s.hostToken, s.createdAt),
     players: s.players.map((p) => ({ ...p, ready: false })),
