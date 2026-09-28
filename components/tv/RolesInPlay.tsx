@@ -8,6 +8,7 @@ import { ROLE_ORDER } from "@/lib/roles";
 /** Pre-game card: portraits only, no names — the court learns the faces of the roles. */
 export function RolesInPlay({ v }: { v: TvView }) {
   const sworn = v.players.filter((p) => p.ready).length;
+  const waiting = v.players.filter((p) => !p.ready).sort((a, b) => a.seat - b.seat);
   const roles = [...v.rolesInPlay].sort(
     (a, b) => ROLE_ORDER.indexOf(a) - ROLE_ORDER.indexOf(b)
   );
@@ -77,16 +78,56 @@ export function RolesInPlay({ v }: { v: TvView }) {
       <div
         style={{
           position: "absolute",
-          bottom: 70,
+          bottom: 56,
           left: 0,
           right: 0,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 18,
           textAlign: "center",
-          font: "400 28px var(--font-body)",
-          color: "var(--parchment-55)",
         }}
       >
-        Hold the seal on your phone to meet your role — {sworn} of {v.playerCount} have taken
-        their sigils
+        {waiting.length > 0 && (
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
+            <div
+              style={{
+                font: "600 18px var(--font-body)",
+                letterSpacing: "0.18em",
+                color: "var(--parchment-55)",
+              }}
+            >
+              STILL AWAITING THEIR SIGILS
+            </div>
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                justifyContent: "center",
+                gap: "10px 28px",
+                maxWidth: 1500,
+              }}
+            >
+              {waiting.map((p) => (
+                <span
+                  key={p.id}
+                  className="serif"
+                  style={{
+                    font: "700 40px var(--font-serif)",
+                    color: "var(--gold)",
+                    opacity: p.connected ? 1 : 0.45,
+                  }}
+                >
+                  {p.name}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+        <div style={{ font: "400 28px var(--font-body)", color: "var(--parchment-55)" }}>
+          Hold the seal on your phone to meet your role — {sworn} of {v.playerCount} have taken
+          their sigils
+        </div>
       </div>
     </div>
   );
